@@ -4,7 +4,7 @@ const connectDB = require('./config/db')
 const PORT = process.env.PORT || 3000;
 
 connectDB();
-User.createAdminAccount();
+User.createDefaultSuperAdmin();
 
 
 app.listen(PORT,()=>{console.log(`Server Running on Port ${PORT}`)})

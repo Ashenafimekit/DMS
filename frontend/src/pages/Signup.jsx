@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,8 +11,9 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "member", // Default role
   });
-  const [passVisible, setPassVissible] = useState(false);
+  const [passVisible, setPassVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -35,21 +36,22 @@ const Signup = () => {
       name: users.name,
       email: users.email,
       password: users.password,
+      role: users.role, // Include role
     };
-    console.log("validate user : ", userData);
+
     try {
       const res = await axios.post(
         "http://localhost:3000/auth/signup",
         userData
       );
-      if (res.status == 201) {
+      if (res.status === 201) {
         toast.success(res.data.message);
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       }
     } catch (error) {
-      console.log("Error : ", error);
+      console.log("Error: ", error);
       if (error.response) {
         if (error.response.status === 400) {
           toast.warning(error.response.data.message);
@@ -73,12 +75,12 @@ const Signup = () => {
       !users.confirmPassword
     ) {
       toast.error("All fields are required");
-      return;
+      return false;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(users.email)) {
       toast.error("Invalid email format");
-      return;
+      return false;
     }
 
     const passwordRegex =
@@ -92,7 +94,7 @@ const Signup = () => {
 
     if (users.password !== users.confirmPassword) {
       toast.error("Passwords do not match");
-      return;
+      return false;
     }
 
     return true;
@@ -131,19 +133,13 @@ const Signup = () => {
             />
             <button
               className="absolute right-1 top-1"
-              onClick={(e) => setPassVissible(!passVisible)}
+              onClick={() => setPassVisible(!passVisible)}
               type="button"
             >
-              <span className={`${passVisible ? "hidden" : "flex"}`}>
-                <VisibilityIcon fontSize="small" />
-              </span>
-              <span className={`${passVisible ? "flex" : "hidden"}`}>
-                <VisibilityOffIcon fontSize="small" />
-              </span>
+              {passVisible ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
             </button>
           </div>
-
-          <div className="relative ">
+          <div className="relative">
             <input
               className="outline-none border border-black py-1 px-2 w-full"
               type={`${confirmVisible ? "text" : "password"}`}
@@ -154,35 +150,39 @@ const Signup = () => {
             />
             <button
               className="absolute right-1 top-1"
-              onClick={(e) => setConfirmVisible(!confirmVisible)}
+              onClick={() => setConfirmVisible(!confirmVisible)}
               type="button"
             >
-              <span className={`${confirmVisible ? "hidden" : "flex"}`}>
-                <VisibilityIcon fontSize="small" />
-              </span>
-              <span className={`${confirmVisible ? "flex" : "hidden"}`}>
-                <VisibilityOffIcon fontSize="small" />
-              </span>
+              {confirmVisible ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
             </button>
           </div>
+          <select
+            className="outline-none border border-black py-1 px-2"
+            onChange={handleChange}
+            name="role"
+            value={users.role}
+          >
+            <option value="member">Member</option>
+            <option value="admin">Admin</option>
+          </select>
           <button
             type="submit"
             className="bg-primary p-2 text-text text-lg font-semibold"
           >
-            signup
+            Signup
           </button>
           <div className="px-4 text-center">
             <h1>
               Already have an account?{" "}
               <Link to="/login" className="text-blue-500 font-semibold">
-                login
+                Login
               </Link>
             </h1>
-            <h1>
+            {/* <h1>
               <Link to="/" className="text-blue-500 text-center">
-                back
+                Back
               </Link>
-            </h1>
+            </h1> */}
           </div>
         </form>
       </div>

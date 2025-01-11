@@ -37,11 +37,7 @@ const Login = () => {
           console.log("User name : ", res.data.user.name);
           sessionStorage.setItem("role", res.data.user.role);
           sessionStorage.setItem("name", res.data.user.name)
-          if (res.data.user.role == "admin") {
-            navigate("/admin");
-          } else {
-            navigate("/");
-          }
+         navigate('/admin')
         });
     } catch (error) {
       console.log("Error : ", error);

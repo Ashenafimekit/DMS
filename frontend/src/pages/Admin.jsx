@@ -1,11 +1,19 @@
-import React from 'react'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Dashboard from "../components/Dashboard";
 
-const Admin = () => {
+
+const Admin = () => {  
   return (
-    <div>
-        <h1 className='text-center text-3xl font-bold'>Welcome to Admin page</h1>
+    <div className="flex flex-row justify-start ">
+      <div className="w-52">
+        <Dashboard />
+      </div>
+      <div className=" w-full ">
+        <Outlet />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;

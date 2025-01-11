@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         primary: "#4F46E5", // Indigo 600
+        lightP : "#6366F1",
         secondary: "#10B981", // Emerald 500
         background: "#F9FAFB", // Cool Gray 50
         text: "#111827", // Gray 900
