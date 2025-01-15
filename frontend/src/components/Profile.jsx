@@ -1,13 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Tabs } from "antd";
+import DiasporaInfoForm from "./DiasporaInfoForm";
+
 
 const Profile = () => {
   const items = [
     {
       key: "1",
       label: "Personal Info",
-      children: "content one",
+      children: <DiasporaInfoForm/>,
       forceRender: true,
     },
     {
@@ -23,7 +25,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="text-lg ">
+    <div className="text-lg h-screen overflow-y-auto ">
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </div>
   );

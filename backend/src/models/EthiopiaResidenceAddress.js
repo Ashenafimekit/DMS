@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const ethiopiaResidenceAddressSchema = new mongoose.Schema({
-  addressID: { type: String },
   region: { type: String },
   city: { type: String },
   kebele: { type: String },
@@ -11,8 +10,9 @@ const ethiopiaResidenceAddressSchema = new mongoose.Schema({
   houseNumbers: { type: String },
   phone: { type: String },
   mobile: { type: String },
-  diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo", required: true },
   email: { type: String },
+  diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo", required: true },
 });
+
 
 module.exports = mongoose.model("EthiopiaResidenceAddress", ethiopiaResidenceAddressSchema);

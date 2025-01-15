@@ -26,7 +26,7 @@ const Login = () => {
     console.log("user : ", users);
 
     try {
-    await axios
+      await axios
         .post("http://localhost:3000/auth/login", users, {
           withCredentials: true,
         })
@@ -36,8 +36,10 @@ const Login = () => {
           console.log("User Role : ", res.data.user.role);
           console.log("User name : ", res.data.user.name);
           sessionStorage.setItem("role", res.data.user.role);
-          sessionStorage.setItem("name", res.data.user.name)
-         navigate('/admin')
+          sessionStorage.setItem("name", res.data.user.name);
+          setInterval(() => {
+            navigate("/admin");
+          }, 3000);
         });
     } catch (error) {
       console.log("Error : ", error);

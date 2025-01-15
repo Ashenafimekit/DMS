@@ -13,7 +13,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 const auth = require('./routes/authRoute');
+const diaspora = require('./routes/diasporaInfoRoute');
 
-app.use('/auth',auth)
+app.use('/auth',auth);
+app.use('/diaspora', diaspora)
 
 module.exports = app;

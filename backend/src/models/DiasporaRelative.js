@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const diasporaRelativeSchema = new mongoose.Schema({
-  addressID: { type: String },
   firstName: { type: String, required: true },
   middleName: { type: String },
   lastName: { type: String, required: true },
@@ -11,12 +10,12 @@ const diasporaRelativeSchema = new mongoose.Schema({
   district: { type: String },
   city: { type: String },
   subCity: { type: String },
-  houseNumber: { type: String },
+  houseNumbers: { type: String },
   telephone: { type: String },
   email: { type: String },
   nationality: { type: String },
-  diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo" },
   relationType: { type: String },
+  diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo" },
 });
 
 module.exports = mongoose.model("DiasporaRelative", diasporaRelativeSchema);

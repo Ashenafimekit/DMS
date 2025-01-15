@@ -7,7 +7,6 @@ const diasporaPassportsSchema = new mongoose.Schema({
   expiryDate: { type: Date, required: true },
   issueAuthority: { type: String, required: true },
   diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo", required: true },
-  passportNumbers: { type: [String] },
 });
 
 module.exports = mongoose.model("DiasporaPassports", diasporaPassportsSchema);

@@ -174,7 +174,7 @@ const Signup = () => {
           <div className="px-4 text-center">
             <h1>
               Already have an account?{" "}
-              <Link to="/login" className="text-blue-500 font-semibold">
+              <Link to="/" className="text-blue-500 font-semibold">
                 Login
               </Link>
             </h1>
