@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Accounts from "./components/Accounts";
+import AccessProtection from "./components/AccessProtection";
 
 const App = () => {
   return (
@@ -15,9 +16,23 @@ const App = () => {
       <Routes>
         <Route index path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/admin" element={<Admin />}>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        >
           <Route path="profile" element={<Profile />} />
-          <Route path="accounts" element={<Accounts />} />
+          <Route
+            path="accounts"
+            element={
+              <AccessProtection  allowedRoles={["admin", "superadmin"]}>
+                <Accounts />
+              </AccessProtection>
+            }
+          />
         </Route>
         <Route path="*" element={<NoPage />} />
       </Routes>

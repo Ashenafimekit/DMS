@@ -70,7 +70,7 @@ const login = async (req, res) => {
       maxAge: 3600000,
       path: "/",
     });
-    res.json({
+    res.status(201).json({
       message: "Logged in successfully",
       user: { name: user.name, role: user.role },
     });

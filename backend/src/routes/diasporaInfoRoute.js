@@ -9,7 +9,7 @@ const upload = multer();
 
 // Create Diaspora Info
 //router.post("/diaspora-info",upload.none(), diaspora.submitForm)
-router.post("/diaspora-info",upload.none(),authMiddleware(['admin']), diaspora.profile)
+router.post("/diaspora-info",upload.none(),authMiddleware(['superadmin', 'admin', 'member']), diaspora.profile)
 router.get("/diaspora-list")
   
 

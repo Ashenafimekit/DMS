@@ -85,4 +85,8 @@ const profile = async (req, res) => {
   }
 };
 
+const diasporaList = async(req, res)=>{
+  
+}
+
 module.exports = { profile };

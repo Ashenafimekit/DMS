@@ -31,15 +31,18 @@ const Login = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data.message);
-          toast.success(res.data.message);
-          console.log("User Role : ", res.data.user.role);
-          console.log("User name : ", res.data.user.name);
-          sessionStorage.setItem("role", res.data.user.role);
-          sessionStorage.setItem("name", res.data.user.name);
-          setInterval(() => {
-            navigate("/admin");
-          }, 3000);
+          if (res.status === 201) {
+            console.log(res.data.message);
+            toast.success(res.data.message);
+            console.log("User Role : ", res.data.user.role);
+            console.log("User name : ", res.data.user.name);
+            sessionStorage.setItem("role", res.data.user.role);
+            sessionStorage.setItem("name", res.data.user.name);
+            setInterval(() => {
+              navigate("/admin");
+              window.location.reload()
+            }, 2000);
+          }
         });
     } catch (error) {
       console.log("Error : ", error);
