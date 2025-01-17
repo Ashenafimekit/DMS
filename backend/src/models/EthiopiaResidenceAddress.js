@@ -15,4 +15,5 @@ const ethiopiaResidenceAddressSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("EthiopiaResidenceAddress", ethiopiaResidenceAddressSchema);
+const Residence = mongoose.model("EthiopiaResidenceAddress", ethiopiaResidenceAddressSchema);
+module.exports = Residence

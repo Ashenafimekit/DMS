@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const DiasporaInfo = require("../models/diasporaInfo");
 const Relatives = require("../models/DiasporaRelative");
 const Skills = require("../models/DiasporaSkills");
@@ -28,7 +28,7 @@ const profile = async (req, res) => {
     }
 
     const diaspora = DiasporaInfo(parsedDiasporaInfo);
-    await diaspora.save({session});
+    await diaspora.save({ session });
     console.log("diaspora info saved");
 
     const passportData = {
@@ -38,7 +38,7 @@ const profile = async (req, res) => {
     };
 
     const passport = new Passport(passportData);
-    await passport.save({session});
+    await passport.save({ session });
     console.log("diaspora Passport saved");
 
     const residenceData = {
@@ -47,7 +47,7 @@ const profile = async (req, res) => {
     };
 
     const residence = new Residence(residenceData);
-    await residence.save({session});
+    await residence.save({ session });
     console.log("diaspora residence added");
 
     const skillsArray = parsedSkills;
@@ -58,7 +58,7 @@ const profile = async (req, res) => {
       };
 
       const skill = new Skills(skillDataWithDiasporaID);
-      await skill.save({session});
+      await skill.save({ session });
       console.log("diaspora skill added");
     }
 
@@ -70,7 +70,7 @@ const profile = async (req, res) => {
       };
 
       const relative = new Relatives(realtiveDataWtihDiasporaID);
-      await relative.save({session});
+      await relative.save({ session });
       console.log("diaspora relatives added");
     }
 
@@ -80,13 +80,68 @@ const profile = async (req, res) => {
     await session.abortTransaction();
     console.error(error);
     res.status(500).json({ error: error.message });
-  } finally{
+  } finally {
     session.endSession();
   }
 };
 
-const diasporaList = async(req, res)=>{
-  
-}
+const diasporaList = async (req, res) => {
+  try {
+    const diasporaList = await DiasporaInfo.find();
+    res.status(200).json({ diasporaList });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
-module.exports = { profile };
+const diasporaInfoEditor = async (req, res) => {
+  const { id } = req.params;
+  const updatedInfo = req.body;
+
+  try {
+    const editedInfo = await DiasporaInfo.findByIdAndUpdate(id, updatedInfo, {
+      new: true,
+    });
+    if (!editedInfo) {
+      return res.status(404).json({ message: "Diaspora record not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Record updated successfully", editedInfo });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteDiaspora = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const diasporaInfo = await DiasporaInfo.findById(id)
+      .populate("relatives")
+      .populate("skills")
+      .populate("passport")
+      .populate("residence");
+
+    if (!diasporaInfo) {
+      return res.status(404).json({ message: "Diaspora Info not found" });
+    }
+    // Delete related documents manually
+    await Relatives.deleteMany({ diasporaID: id });
+    await Skills.deleteMany({ diasporaID: id });
+    await Passport.deleteMany({ diasporaID: id });
+    await Residence.deleteMany({ diasporaID: id });
+
+    // Now delete the diaspora info
+    await diasporaInfo.deleteOne();
+
+    res.status(201).json({ message: "Diaspora info deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { profile, diasporaList, diasporaInfoEditor, deleteDiaspora };

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Tabs } from "antd";
 import DiasporaInfoForm from "./DiasporaInfoForm";
+import DiasporaList from "./DiasporaList";
 
 
 const Profile = () => {
@@ -14,8 +15,32 @@ const Profile = () => {
     },
     {
       key: "2",
-      label: "Family Info",
-      children: "content two",
+      label: "Diaspora List",
+      children: <DiasporaList/>,
+      forceRender: true,
+    },
+    {
+      key: "3",
+      label: "Diaspora Passport",
+      children: "",
+      forceRender: true,
+    },
+    {
+      key: "4",
+      label: "Diaspora Skill",
+      children: "",
+      forceRender: true,
+    },
+    {
+      key: "5",
+      label: "Diaspora Address",
+      children: "",
+      forceRender: true,
+    },
+    {
+      key: "6",
+      label: "Diaspora Relative",
+      children: "",
       forceRender: true,
     },
   ];

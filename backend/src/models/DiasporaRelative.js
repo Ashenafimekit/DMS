@@ -18,4 +18,5 @@ const diasporaRelativeSchema = new mongoose.Schema({
   diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo" },
 });
 
-module.exports = mongoose.model("DiasporaRelative", diasporaRelativeSchema);
+const Relatives = mongoose.model("DiasporaRelative", diasporaRelativeSchema);
+module.exports = Relatives

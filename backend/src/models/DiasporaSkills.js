@@ -15,4 +15,5 @@ const diasporaSkillsSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("DiasporaSkills", diasporaSkillsSchema);
+const Skills = mongoose.model("DiasporaSkills", diasporaSkillsSchema);
+module.exports = Skills

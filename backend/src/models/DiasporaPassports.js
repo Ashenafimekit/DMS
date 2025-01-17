@@ -9,4 +9,5 @@ const diasporaPassportsSchema = new mongoose.Schema({
   diasporaID: { type: mongoose.Schema.Types.ObjectId, ref: "DiasporaInfo", required: true },
 });
 
-module.exports = mongoose.model("DiasporaPassports", diasporaPassportsSchema);
+const Passport = mongoose.model("DiasporaPassports", diasporaPassportsSchema);
+module.exports = Passport;
