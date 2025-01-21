@@ -47,7 +47,7 @@ const Signup = () => {
       if (res.status === 201) {
         toast.success(res.data.message);
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 3000);
       }
     } catch (error) {

@@ -68,8 +68,8 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-[#F0F8FF] flex items-center justify-center h-screen">
-      <div className="flex flex-col items-center justify-center rounded bg-white pt-4 px-20 pb-20">
+    <div className="bg-[#F0F8FF] flex items-center justify-center h-screen  ">
+      <div className="flex flex-col items-center justify-center rounded bg-white pt-4 px-20 pb-20 shadow-lg">
         <div className="">{toast && <ToastContainer autoClose={2000} />}</div>
         <h1 className="text-3xl">Login</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 pt-8 w-64">

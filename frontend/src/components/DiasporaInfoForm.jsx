@@ -269,30 +269,31 @@ const DiasporaInfoForm = () => {
       );
       if (response.status === 201) {
         console.log(response.data.message);
-        toast(response.data.message);
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error(error);
       if (error.response) {
         if (error.response.status === 400) {
-          toast(error.response.data.message);
+          toast.error(error.response.data.message);
         }
         if (error.response.status === 403) {
-          toast(error.response.data.message);
+          toast.error(error.response.data.message);
         }
         if (error.response.status === 500) {
-          toast(error.response.data.message);
+          toast.error(error.response.data.message);
         } else {
-          toast("Error creating profile.");
+          toast.error("Error creating profile.");
         }
       }
     }
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen py-10">
+    <div className="flex items-center justify-center min-h-screen py-10">
+      <ToastContainer/>
       <form
-        className="p-8 space-y-6 bg-white shadow-lg rounded-lg max-w-4xl w-full"
+        className="p-8 space-y-6 bg-white shadow-2xl rounded-lg max-w-4xl w-full"
         onSubmit={handleSubmit}
       >
         {/* Diaspora Info */}
@@ -384,7 +385,7 @@ const DiasporaInfoForm = () => {
             <option value="" disabled>
               Select Married Status
             </option>
-            <option value="married">Married</option>
+            <option value="married">Single</option>
             <option value="non-married">Non-Married</option>
           </select>
 

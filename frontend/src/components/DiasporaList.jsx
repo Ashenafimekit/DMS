@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Table, Input, Select, Button, Modal, Form, message } from "antd";
+import { Table, Input, Select, Button, Modal, Form } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 
 const { Search } = Input;
@@ -14,40 +14,48 @@ const DiasporaList = () => {
   const [form] = Form.useForm(); // Initialize Ant Design form instance
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  const fetchList = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/diaspora/diaspora-list`, {
+        withCredentials: true,
+      });
+      //console.log("list : ", response.data.diasporaList);
+      const profileDataList = response.data.diasporaList;
+
+      const transformedData = profileDataList.map((profile, index) => ({
+        key: index + 1,
+        id: profile._id,
+        firstName: profile.firstName,
+        middleName: profile.middleName,
+        lastName: profile.lastName,
+        birthDate: new Date(profile.birthDate).toLocaleDateString(),
+        formerNationality: profile.formerNationality,
+        presentNationality: profile.presentNationality,
+        maritalStatus: profile.marriedStatus,
+        religion: profile.religion,
+        photo: profile.photo ? "Available" : "Not Available",
+      }));
+
+      setDiasporaList(transformedData);
+      setFilteredData(transformedData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchList = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/diaspora/diaspora-list`, {
-          withCredentials: true,
-        });
-        console.log("list : ", response.data.diasporaList);
-        const profileDataList = response.data.diasporaList;
-
-        const transformedData = profileDataList.map((profile, index) => ({
-          key: index + 1,
-          id: profile._id, // Assuming there's a unique ID from the backend
-          firstName: profile.firstName,
-          middleName: profile.middleName,
-          lastName: profile.lastName,
-          birthDate: new Date(profile.birthDate).toLocaleDateString(),
-          formerNationality: profile.formerNationality,
-          presentNationality: profile.presentNationality,
-          maritalStatus: profile.marriedStatus,
-          religion: profile.religion,
-          photo: profile.photo ? "Available" : "Not Available",
-        }));
-
-        setDiasporaList(transformedData);
-        setFilteredData(transformedData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-        setLoading(false);
-      }
-    };
-
     fetchList();
   }, []);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    setTimeout(() => {
+      fetchList();
+      setLoading(false);
+    }, 1000);
+  };
 
   const handleSearch = (value) => {
     const searchTerm = value.toLowerCase();
@@ -69,9 +77,8 @@ const DiasporaList = () => {
         }
       );
 
-      if(response.status === 201){
+      if (response.status === 201) {
         toast.success("Record deleted successfully!");
-
       }
 
       setDiasporaList((prev) => prev.filter((item) => item.id !== record.id));
@@ -185,7 +192,7 @@ const DiasporaList = () => {
         <div className="w-full">
           <Button
             type=""
-            className="bg-yellow-400 w-1/2"
+            className="bg-yellow-500 w-1/2"
             onClick={() => handleEdit(record)}
           >
             Edit
@@ -205,14 +212,17 @@ const DiasporaList = () => {
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-5/6">
       <ToastContainer />
-      <div className="flex items-center justify-center w-1/2">
+      <div className="flex flex-row gap-5 items-center justify-center w-1/2">
         <Search
           placeholder="Search diaspora data"
-          onSearch={handleSearch}
-          enterButton
+          onChange={(e) => handleSearch(e.target.value)}
+          allowClear
         />
+        <Button onClick={handleRefresh} type="primary">
+          Refresh
+        </Button>
       </div>
-      <div className="flex items-center justify-center pl-10">
+      <div className="flex items-center justify-center w-5/6">
         <Table
           columns={columns}
           dataSource={filteredData}
@@ -232,11 +242,7 @@ const DiasporaList = () => {
         footer={null}
         afterClose={() => form.resetFields()}
       >
-        <Form
-          form={form} // Connect the form instance
-          onFinish={handleSaveEdit}
-          layout="vertical"
-        >
+        <Form form={form} onFinish={handleSaveEdit} layout="vertical">
           <Form.Item
             name="firstName"
             label="First Name"
