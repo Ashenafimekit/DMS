@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Table, Input, Select, Button, Modal, Form } from "antd";
+import { Table, Input, Select, Button, Modal, Form,message } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 
 const { Search } = Input;
@@ -78,14 +78,14 @@ const DiasporaList = () => {
       );
 
       if (response.status === 201) {
-        toast.success("Record deleted successfully!");
+        message.success("Record deleted successfully!");
       }
 
       setDiasporaList((prev) => prev.filter((item) => item.id !== record.id));
       setFilteredData((prev) => prev.filter((item) => item.id !== record.id));
     } catch (error) {
       console.error("Error deleting record: ", error);
-      toast.error("Failed to delete record.");
+      message.error("Failed to delete record.");
     }
   };
 
@@ -106,7 +106,7 @@ const DiasporaList = () => {
         }
       );
       if (response.status === 200) {
-        toast.success(response.data.message);
+        message.success(response.data.message);
       }
       setDiasporaList((prev) =>
         prev.map((item) =>
@@ -129,11 +129,11 @@ const DiasporaList = () => {
           error.response.data.message || "Failed to update record.";
 
         if (status === 404) {
-          toast.error(errorMessage);
+          message.error(errorMessage);
         } else if (status === 500) {
-          toast.error("Server error");
+          message.error("Server error");
         } else {
-          toast.error(errorMessage);
+          message.error(errorMessage);
         }
       }
     }

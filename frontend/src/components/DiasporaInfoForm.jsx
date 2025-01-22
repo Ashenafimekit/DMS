@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { message } from "antd";
 
 const DiasporaInfoForm = () => {
   const [formData, setFormData] = useState({
@@ -234,7 +235,7 @@ const DiasporaInfoForm = () => {
 
     const errors = validateFormData(formData);
     if (errors.length > 0) {
-      errors.forEach((error) => toast.error(error));
+      errors.forEach((error) => message.error(error));
       return;
     }
 
@@ -255,8 +256,8 @@ const DiasporaInfoForm = () => {
       formDataToSubmit.append("photo", formData.diasporaInfo.photo);
     }
 
-    console.log("data : ", formData);
-    console.log("form data to sumbit : ", formDataToSubmit);
+    //console.log("data : ", formData);
+    //console.log("form data to sumbit : ", formDataToSubmit);
 
     try {
       const response = await axios.post(
@@ -269,29 +270,29 @@ const DiasporaInfoForm = () => {
       );
       if (response.status === 201) {
         console.log(response.data.message);
-        toast.success(response.data.message);
+        message.success(response.data.message);
       }
     } catch (error) {
       console.error(error);
       if (error.response) {
         if (error.response.status === 400) {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
         if (error.response.status === 403) {
-          toast.error(error.response.data.message);
+          message.error(error.response.data.message);
         }
         if (error.response.status === 500) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("Error creating profile.");
+          message.error(error.response.data.message);
         }
+      } else {
+        message.error("Error creating profile.");
       }
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen py-10">
-      <ToastContainer/>
+      <ToastContainer />
       <form
         className="p-8 space-y-6 bg-white shadow-2xl rounded-lg max-w-4xl w-full"
         onSubmit={handleSubmit}
@@ -321,7 +322,6 @@ const DiasporaInfoForm = () => {
             onChange={handleChange}
             value={formData.diasporaInfo.middleName}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
           <div className="relative">
             <input
@@ -368,14 +368,20 @@ const DiasporaInfoForm = () => {
             value={formData.diasporaInfo.formerNationality}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <input
-            type="text"
-            name="presentNationality"
-            placeholder="Present Nationality"
-            onChange={handleChange}
-            value={formData.diasporaInfo.presentNationality}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <input
+              type="text"
+              name="presentNationality"
+              placeholder="Present Nationality"
+              onChange={handleChange}
+              value={formData.diasporaInfo.presentNationality}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <span className="absolute right-2 font-bold text-2xl text-red-500">
+              *
+            </span>
+          </div>
+
           <select
             name="marriedStatus"
             onChange={handleChange}

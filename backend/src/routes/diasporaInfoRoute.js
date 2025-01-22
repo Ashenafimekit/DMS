@@ -12,12 +12,15 @@ router.get("/diaspora-list", diaspora.diasporaList)
 router.get('/diaspora-passport', diaspora.DiasporaPassports)
 router.get('/diaspora-address', diaspora.diasporaAddress)
 router.get("/diaspora-skill", diaspora.diasporaSkill)
+router.get("/diaspora-relative", diaspora.diasporaRelative)
+router.put("/diaspora-relative-edit/:id", diaspora.editDiasporaRelative)    
 router.put("/diaspora-info-edit/:id", diaspora.diasporaInfoEditor)
 router.put("/diaspora-skill-edit/:id", diaspora.editDiasporaSkill)
 router.put("/diaspora-passport-edit/:id", diaspora.EditDiasporaPassport)
 router.put("/diaspora-address-edit/:id", diaspora.editDiasporaAddress)
 router.delete("/diaspora-delete/:id", diaspora.deleteDiaspora)
 router.delete("/skill-delete/:id", diaspora.deleteSkill)
+router.delete("/relative-delete/:id", diaspora.deleteRelative)
   
 
 module.exports = router;

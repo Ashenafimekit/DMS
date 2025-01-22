@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Table, Input, Select, DatePicker, Button, Modal, Form } from "antd";
+import { Table, Input, DatePicker, Button, Modal, Form, message } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 const { Search } = Input;
 
@@ -94,7 +94,7 @@ const DiasporaPassport = () => {
         }
       );
       if (response.status === 200) {
-        toast.success(response.data.message);
+        message.success(response.data.message);
       }
       setPassportList((prev) =>
         prev.map((item) =>
@@ -117,11 +117,11 @@ const DiasporaPassport = () => {
           error.response.data.message || "Failed to update record.";
 
         if (status === 404) {
-          toast.error(errorMessage);
+          message.error(errorMessage);
         } else if (status === 500) {
-          toast.error("Server error");
+          message.error("Server error");
         } else {
-          toast.error(errorMessage);
+          message.error(errorMessage);
         }
       }
     }

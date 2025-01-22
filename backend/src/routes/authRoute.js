@@ -8,5 +8,6 @@ router.post('/logout', authController.logout);
 router.post('/signup', authController.signup);
 router.get('/accounts', authMiddleware(["superadmin"]), authController.accounts)
 router.patch('/approve/:id', authMiddleware(['superadmin']), authController.approval)
+router.delete('/delete-account/:id', authMiddleware(['superadmin']), authController.deleteAccount)
 
 module.exports = router;

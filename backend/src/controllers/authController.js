@@ -62,12 +62,12 @@ const login = async (req, res) => {
     } catch (error) {
       console.error("Error generating token:", error); // Catch and log any errors
     }
-   // console.log("token : ", token);
+    // console.log("token : ", token);
     res.cookie("token", token, {
       httpOnly: true,
       secure: false, //(process.env.NODE_ENV = "production"),
       sameSite: "lax", // "lax"
-      maxAge: 24 * 60 *60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
       path: "/",
     });
     res.status(201).json({
@@ -86,7 +86,7 @@ const logout = async (req, res) => {
 };
 
 const approval = async (req, res) => {
-  const  userId  = req.params.id;
+  const userId = req.params.id;
   try {
     // Verify that the requester is a superadmin
     if (req.user.role !== "superadmin") {
@@ -127,10 +127,32 @@ const accounts = async (req, res) => {
   }
 };
 
+const deleteAccount = async (req, res) => {
+  const { id } = req.params;
+  console.log("id : ", id);
+  try {
+    if (req.user.role !== "superadmin") {
+      return res.status(403).json({
+        message: "Access denied. Only superadmins can approve users.",
+      });
+    }
+
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.log("Error deleting account : ", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   login,
   logout,
   signup,
   approval,
   accounts,
+  deleteAccount,
 };

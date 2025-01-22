@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Table, Button, Input } from "antd";
+import { Table, Button, Input, message } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 
 const Accounts = () => {
@@ -20,12 +20,12 @@ const Accounts = () => {
       );
       setUsers(filteredUsers);
       setOriginalUsers(filteredUsers); // Store the full data
-      console.log("accounts : ", filteredUsers);
+      //console.log("accounts : ", filteredUsers);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        toast.error(error.response.data.message);
+        message.error(error.response.data.message);
       } else if (error.response && error.response.status === 401) {
-        toast.error("Session expired. Please log in again.");
+        message.error("Session expired. Please log in again.");
         window.location.href = "/";
       }
       console.log("error ", error);
@@ -55,7 +55,7 @@ const Accounts = () => {
       );
 
       if (response.status === 200) {
-        toast.success(response.data.message);
+        message.success(response.data.message);
       }
 
       setUsers(
@@ -65,8 +65,42 @@ const Accounts = () => {
       );
     } catch (error) {
       console.log("error : ", error);
-      toast.error("Server Error, please try again");
+      message.error("Server Error, please try again");
     }
+  };
+
+   // Delete handler
+   const handleDelete = async (record) => {
+    try {
+      const response = await axios.delete(
+        `${apiUrl}/auth/delete-account/${record._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        message.success(response.data.message);
+      }
+
+      setUsers((prev) => prev.filter((item) => item.id !== record.id));
+    } catch (error) {
+          console.error("Error deleting account: ", error);
+    
+          if (error.response) {
+            const status = error.response.status;
+            const errorMessage =
+              error.response.data.message ;
+    
+            if (status === 404) {
+              message.error(errorMessage);
+            } else if (status === 500) {
+              message.error("Server error");
+            } else {
+              message.error(errorMessage);
+            }
+          }
+        }
   };
 
   const handleSearch = (value) => {
@@ -99,14 +133,23 @@ const Accounts = () => {
     {
       title: "Approve",
       key: "approve",
-      render: (text, record) => (
-        <Button
-          className="bg-green-500 text-white"
-          onClick={() => handleApprove(record)}
-          disabled={record.isApproved}
-        >
-          {record.isApproved ? "Approved" : "Approve"}
-        </Button>
+      render: (_, record) => (
+        <div className="flex flex-row gap-1 w-full">
+          <Button
+            className="bg-green-500 text-white w-1/2"
+            onClick={() => handleApprove(record)}
+            disabled={record.isApproved}
+          >
+            {record.isApproved ? "Approved" : "Approve"}
+          </Button>
+          <Button
+            type=""
+            className="bg-red-500 w-1/2"
+            onClick={() => handleDelete(record)}
+          >
+            Delete
+          </Button>
+        </div>
       ),
     },
   ];
@@ -125,7 +168,7 @@ const Accounts = () => {
         <ToastContainer />
         <div className="flex flex-row gap-5 items-center justify-center w-1/2">
           <Input.Search
-            placeholder="Search diaspora data"
+            placeholder="Search Account"
             onChange={(e) => handleSearch(e.target.value)}
             allowClear
           />

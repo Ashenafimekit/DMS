@@ -4,64 +4,76 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 const { Search } = Input;
 
-const DiasporaSkill = () => {
+const DiasporaRelative = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]); // Filtered data
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingSkill, setEditingSkill] = useState(null);
+  const [editingRelative, setEditingRelative] = useState(null);
   const [form] = Form.useForm();
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/diaspora/diaspora-skill`, {
+      const response = await axios.get(`${apiUrl}/diaspora/diaspora-relative`, {
         withCredentials: true,
       });
 
       const diasporaList = response.data.diaspora;
-      const skillList = response.data.diasporaSkill;
+      const relativeList = response.data.diasporaRelative;
+
+      //console.log("Relatives:", relativeList);
 
       const rows = [];
       diasporaList.forEach((diaspora) => {
-        const skills = skillList.filter(
-          (skill) => skill.diasporaID === diaspora._id
+        const relatives = relativeList.filter(
+          (relative) => relative.diasporaID === diaspora._id
         );
 
-        if (skills.length > 0) {
-          skills.forEach((skill, index) => {
+        if (relatives.length > 0) {
+          relatives.forEach((relative, index) => {
             rows.push({
               key: `${diaspora._id}-${index}`,
               diasporaName: `${diaspora.firstName} ${diaspora.middleName} ${diaspora.lastName}`,
-              showDiasporaName: index === 0, // New field to control when to render the name
-              expertise: skill.expertise || "N/A",
-              expertiseField: skill.expertiseField || "N/A",
-              educationalBackground: skill.educationalBackground || "N/A",
-              expertiseCountry: skill.expertiseCountry || "N/A",
-              professionalExperience: skill.professionalExperience || "N/A",
-              professionalAffiliation: skill.professionalAffiliation || "N/A",
-              shortBio: skill.shortBio || "N/A",
-              skillId: skill._id,
+              showDiasporaName: index === 0,
+              relationType: relative.relationType || "N/A",
+              firstName: relative.firstName || "N/A",
+              middleName: relative.middleName || "N/A",
+              lastName: relative.lastName || "N/A",
+              email: relative.email || "N/A",
+              region: relative.region || "N/A",
+              zone: relative.zone || "N/A",
+              district: relative.district || "N/A",
+              houseNumbers: relative.houseNumbers || "N/A",
+              sex: relative.sex || "N/A",
+              nationality: relative.nationality || "N/A",
+              city: relative.city || "N/A",
+              relativeId: relative._id,
             });
           });
         } else {
           rows.push({
-            key: `${diaspora._id}-no-skill`,
+            key: `${diaspora._id}-no-relative`,
             diasporaName: `${diaspora.firstName} ${diaspora.middleName} ${diaspora.lastName}`,
             showDiasporaName: true,
-            expertise: "No Skills Found",
-            expertiseField: "N/A",
-            educationalBackground: "N/A",
-            expertiseCountry: "N/A",
-            professionalExperience: "N/A",
-            professionalAffiliation: "N/A",
-            shortBio: "N/A",
+            relationType: "No Relatives Found",
+            firstName: "N/A",
+            middleName: "N/A",
+            lastName: "N/A",
+            email: "N/A",
+            region: "N/A",
+            zone: "N/A",
+            district: "N/A",
+            houseNumbers: "N/A",
+            sex: "N/A",
+            nationality: "N/A",
+            city: "N/A",
           });
         }
       });
 
       setData(rows);
-      setFilteredData(rows); 
+      setFilteredData(rows);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -93,21 +105,21 @@ const DiasporaSkill = () => {
     setFilteredData(filtered);
   };
 
-  const handleEdit = (skill) => {
-    setEditingSkill(skill);
-    form.setFieldsValue(skill);
+  const handleEdit = (relative) => {
+    setEditingRelative(relative);
+    form.setFieldsValue(relative);
     setIsEditing(true);
   };
 
-  const handleDelete = async (skillId) => {
+  const handleDelete = async (relativeId) => {
     try {
-      await axios.delete(`${apiUrl}/diaspora/skill-delete/${skillId}`, {
+      await axios.delete(`${apiUrl}/diaspora/relative-delete/${relativeId}`, {
         withCredentials: true,
       });
-      message.success("Skill deleted successfully!");
+      message.success("Relative deleted successfully!");
       fetchData();
     } catch (error) {
-      message.error("Failed to delete skill.");
+      message.error("Failed to delete relative.");
       console.error(error);
     }
   };
@@ -115,18 +127,18 @@ const DiasporaSkill = () => {
   const handleEditSubmit = async (values) => {
     try {
       await axios.put(
-        `${apiUrl}/diaspora/diaspora-skill-edit/${editingSkill.skillId}`,
+        `${apiUrl}/diaspora/diaspora-relative-edit/${editingRelative.relativeId}`,
         values,
         {
           withCredentials: true,
         }
       );
-      message.success("Skill updated successfully!");
+      message.success("Relative updated successfully!");
       setIsEditing(false);
-      setEditingSkill(null);
+      setEditingRelative(null);
       fetchData();
     } catch (error) {
-      message.error("Failed to update skill.");
+      message.error("Failed to update relative.");
       console.error(error);
     }
   };
@@ -153,39 +165,54 @@ const DiasporaSkill = () => {
       },
     },
     {
-      title: "Expertise",
-      dataIndex: "expertise",
-      key: "expertise",
+      title: "Relation Type",
+      dataIndex: "relationType",
+      key: "relationType",
     },
     {
-      title: "Field",
-      dataIndex: "expertiseField",
-      key: "expertiseField",
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName",
     },
     {
-      title: "Country",
-      dataIndex: "expertiseCountry",
-      key: "expertiseCountry",
+      title: "Middle Name",
+      dataIndex: "middleName",
+      key: "middleName",
     },
     {
-      title: "Educational Background",
-      dataIndex: "educationalBackground",
-      key: "educationalBackground",
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "lastName",
     },
     {
-      title: "Professional Experience",
-      dataIndex: "professionalExperience",
-      key: "professionalExperience",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: "Professional Affiliation",
-      dataIndex: "professionalAffiliation",
-      key: "professionalAffiliation",
+      title: "Region",
+      dataIndex: "region",
+      key: "region",
     },
     {
-      title: "Short Bio",
-      dataIndex: "shortBio",
-      key: "shortBio",
+      title: "Zone",
+      dataIndex: "zone",
+      key: "zone",
+    },
+    {
+      title: "District",
+      dataIndex: "district",
+      key: "district",
+    },
+    {
+      title: "House Numbers",
+      dataIndex: "houseNumbers",
+      key: "houseNumbers",
+    },
+    {
+      title: "City",
+      dataIndex: "city",
+      key: "city",
     },
     {
       title: "Actions",
@@ -200,11 +227,11 @@ const DiasporaSkill = () => {
           >
             Edit
           </Button>
-          {row.skillId && (
+          {row.relativeId && (
             <Button
               type=""
               className="bg-red-500 w-1/2"
-              onClick={() => handleDelete(row.skillId)}
+              onClick={() => handleDelete(row.relativeId)}
             >
               Delete
             </Button>
@@ -219,7 +246,7 @@ const DiasporaSkill = () => {
       <ToastContainer />
       <div className="flex flex-row gap-5 items-center justify-center w-1/2">
         <Search
-          placeholder="Search diaspora skill"
+          placeholder="Search diaspora relative"
           onChange={(e) => handleSearch(e.target.value)}
           allowClear
         />
@@ -237,36 +264,45 @@ const DiasporaSkill = () => {
         />
       </div>
       <Modal
-        title="Edit Skill"
+        title="Edit Relative"
         open={isEditing}
         onCancel={() => setIsEditing(false)}
         footer={null}
       >
         <Form form={form} layout="vertical" onFinish={handleEditSubmit}>
           <Form.Item
-            name="expertise"
-            label="Expertise"
-            rules={[{ required: true, message: "Please enter expertise" }]}
+            name="relationType"
+            label="Relation Type"
+            rules={[{ required: true, message: "Please enter relation type" }]}
           >
             <Input />
           </Form.Item>
-          <Form.Item name="expertiseField" label="Field">
+          <Form.Item name="firstName" label="First Name">
             <Input />
           </Form.Item>
-          <Form.Item name="educationalBackground" label="Education">
+          <Form.Item name="middleName" label="Middle Name">
             <Input />
           </Form.Item>
-          <Form.Item name="expertiseCountry" label="Country">
+          <Form.Item name="lastName" label="Last Name">
             <Input />
           </Form.Item>
-          <Form.Item name="professionalExperience" label="Experience">
+          <Form.Item name="email" label="Email">
             <Input />
           </Form.Item>
-          <Form.Item name="professionalAffiliation" label="Affiliation">
+          <Form.Item name="region" label="Region">
             <Input />
           </Form.Item>
-          <Form.Item name="shortBio" label="Short Bio">
-            <Input.TextArea rows={4} />
+          <Form.Item name="zone" label="Zone">
+            <Input />
+          </Form.Item>
+          <Form.Item name="district" label="District">
+            <Input />
+          </Form.Item>
+          <Form.Item name="houseNumbers" label="House Numbers">
+            <Input />
+          </Form.Item>
+          <Form.Item name="city" label="City">
+            <Input />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
@@ -279,4 +315,4 @@ const DiasporaSkill = () => {
   );
 };
 
-export default DiasporaSkill;
+export default DiasporaRelative;

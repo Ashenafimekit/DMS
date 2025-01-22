@@ -257,6 +257,53 @@ const deleteSkill = async (req, res) => {
   }
 };
 
+const diasporaRelative = async (req, res) => {
+  try {
+    const relative = await Relatives.find();
+    const diasporaRelative = await Relatives.find();
+    const diaspora = await DiasporaInfo.find();
+    res.status(200).json({ diasporaRelative, diaspora });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const editDiasporaRelative = async (req, res) => {
+  const { id } = req.params;
+  const updatedInfo = req.body;
+
+  try {
+    const updatedRelative = await Relatives.findByIdAndUpdate(id, updatedInfo, {
+      new: true,
+    });
+    if (!updatedRelative) {
+      return res.status(404).json({ message: "Diaspora Relative not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Relative updated successfully", updatedRelative });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteRelative = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const relative = await Relatives.findById(id);
+    if (!relative) {
+      return res.status(404).json({ message: "Relative not found" });
+    }
+    await relative.deleteOne();
+    res.status(201).json({ message: "Relative deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   profile,
   diasporaList,
@@ -269,4 +316,7 @@ module.exports = {
   diasporaSkill,
   editDiasporaSkill,
   deleteSkill,
+  diasporaRelative,
+  editDiasporaRelative,
+  deleteRelative,
 };
