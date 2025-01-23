@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Accounts from "./components/Accounts";
 import AccessProtection from "./components/AccessProtection";
+import Organization from "./components/Organization";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             </ProtectedRoute>
           }
         >
+          <Route path="organization" element={<Organization />} />
           <Route path="profile" element={<Profile />} />
           <Route
             path="accounts"

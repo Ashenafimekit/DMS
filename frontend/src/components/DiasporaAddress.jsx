@@ -227,11 +227,11 @@ const DiasporaAddress = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-2 items-center justify-center w-5/6">
+    <div className="flex flex-col gap-2 items-center justify-center w-full overflow-auto ">
       <ToastContainer />
       <div className="flex flex-row gap-5 items-center justify-center w-1/2">
         <Search
-          placeholder="Search diaspora data"
+          placeholder="Search diaspora address"
           onChange={(e) => handleSearch(e.target.value)}
           allowClear
         />
@@ -239,7 +239,7 @@ const DiasporaAddress = () => {
           Refresh
         </Button>
       </div>
-      <div className="flex items-center justify-center w-11/12">
+      <div className="flex items-center justify-center w-full">
         <Table
           columns={columns}
           dataSource={filteredData}

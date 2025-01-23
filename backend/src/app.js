@@ -14,8 +14,10 @@ app.use(cookieParser());
 
 const auth = require('./routes/authRoute');
 const diaspora = require('./routes/diasporaInfoRoute');
+const company = require('./routes/companyRoute');
 
 app.use('/auth',auth);
 app.use('/diaspora', diaspora)
+app.use('/company', company);
 
 module.exports = app;

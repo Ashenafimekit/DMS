@@ -50,8 +50,8 @@ const Dashboard = () => {
             </Link>
           </h1>
           <h1 className="hover:bg-blue-600 p-2">
-            <Link to="">
-              <AddIcon /> Create Project
+            <Link to="organization">
+              <AddIcon /> Organization
             </Link>
           </h1>
           <h1 className="hover:bg-blue-600 p-2">

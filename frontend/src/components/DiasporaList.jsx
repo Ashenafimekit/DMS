@@ -189,7 +189,7 @@ const DiasporaList = () => {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <div className="w-full">
+        <div className="w-full flex flex-row  gap-2">
           <Button
             type=""
             className="bg-yellow-500 w-1/2"
